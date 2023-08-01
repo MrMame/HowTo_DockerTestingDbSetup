@@ -53,7 +53,9 @@ defined inside the ```docker-compose.yml``` file.
 
 - Start/stop docker-compose.yml images
 ```
-    sudo docker compose start
+    sudo docker compose -f ./docker-compose.yml up --detach     // "-f <dockerComposeFilename> will target a file
+                                                                // "up" will use ,among other things, container_names definitions
+                                                                // --detach will proceed commandline processing of shell script
     sudo docker compose stop
     sudo docker compose stop <imageName>
 ```
