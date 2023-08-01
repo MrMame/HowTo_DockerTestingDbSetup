@@ -24,7 +24,57 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jolokia</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.43.0</version>
+                <configuration>
+                    <images>
+                        <!-- HTTP Service image holding the FAT-Jar with embedded tomcat -->
+                        <image>
+                            <alias>service</alias>
+                            <name>jolokia/${project.artifactId}-rhuss:${project.version}</name>
+                            <build>
+                                <from>java:8u40</from>
+                                <assembly>
+                                    <descriptor>assembly.xml</descriptor>
+                                </assembly>
+                                <ports>
+                                    <port>8080</port>
+                                </ports>
+                                <command>java -Djava.security.egd=file:/dev/./urandom
+                                    -jar /maven/docker-sample.jar</command>
+                            </build>
+
+                            <!-- Running the container -->
+                            <run>
+                                <ports>
+                                    <port>service.port:8080</port>
+                                </ports>
+                                <links>
+                                    <link>db</link>
+                                </links>
+                            </run>
+                        </image>
 
 
+                        <!-- PostgresSQL Image -->
+                        <image>
+                            <alias>db</alias>
+                            <name>postgres:9</name>
+                            <run>
+                                <wait>
+                                    <log>database system is ready to accept connections</log>
+                                </wait>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
+

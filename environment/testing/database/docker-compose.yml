@@ -5,12 +5,14 @@ services:
 
   db:
     image: postgres
+    container_name: testing-db
     restart: always
     environment:
       POSTGRES_PASSWORD: example
 
   adminer:
     image: adminer
+    container_name: testing-adminer
     restart: always
     ports:
       - 8080:8080
